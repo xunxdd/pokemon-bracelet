@@ -1,6 +1,6 @@
 # pokemon-go
 
-> A Vue.js project
+> A little pokemon website built, using Vue js, for a little boy who loves pokemon.
 
 ## Build Setup
 
