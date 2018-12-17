@@ -31,9 +31,6 @@
     data () {
       return {
         items: [
-        ],
-        items2: [
-          { title: 'Travis Howard', avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg' }
         ]
       }
     }

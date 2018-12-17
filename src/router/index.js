@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import PokeCollection from '@/components/PokeCollection'
+import PokeCollectionFiltered from '@/components/PokeCollectionFiltered'
 import PokeCollectionEditor from '@/components/PokeCollection-Editor'
+import PokeStatCard from '@/components/PokeStatCard'
 import PokeMoves from '@/components/PokeMoves'
 import BraceletPowers from '@/components/BraceletPowers'
 import BraceletCanHold from '@/components/BraceletCanHold'
@@ -22,9 +24,19 @@ export default new Router({
       component: PokeCollection
     },
     {
-      path: '/poke-editor/:key/:page',
+      path: '/pokefiltered/:query',
+      name: 'PokeCollectionFiltered',
+      component: PokeCollectionFiltered
+    },
+    {
+      path: '/poke-editor/:key',
       name: 'PokeCollectionEditor',
       component: PokeCollectionEditor
+    },
+    {
+      path: '/pokecard/:key',
+      name: 'PokeStatCard',
+      component: PokeStatCard
     },
     {
       path: '/poke-editor',
@@ -51,5 +63,8 @@ export default new Router({
       name: 'WishList',
       component: WishList
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 })

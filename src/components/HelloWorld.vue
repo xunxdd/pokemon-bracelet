@@ -1,9 +1,11 @@
 <script>
+import FileUploadSrv from '@/services/fileupload.srv'
+
 export default {
-  data() {
-    return {
-      list: []
-    }
+  mounted() {
+    setTimeout(() => {
+      FileUploadSrv.wakeFileUploadApp();
+    }, 1000);
   }
 }
 </script>

@@ -1,6 +1,14 @@
 import axios from 'axios'
 
 export default {
+  // a dummy sever wake up
+  wakeFileUploadApp() {
+    axios({
+        method: 'GET',
+        url: 'https://core-util.herokuapp.com/'
+      })
+  },
+
   sendFileData(imageFile) {
     const bodyFormData = new FormData();
     bodyFormData.append('upl', imageFile);

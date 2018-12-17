@@ -1,8 +1,9 @@
 <script>
 import PokeService from '@/services/poke.srv'
+import PokeStat from '@/components/component/stat'
+
 import Vue from 'vue'
 import _ from 'lodash'
-Vue.use(require('vue-moment'));
 
 export default {
   data() {
@@ -10,15 +11,20 @@ export default {
       pokeStats: {
         items: []
       },
-      sort_options: [
-        'Name A-Z',
-        'Name Z-A',
-        'Rank Lowest to Highest',
-        'Rank Hightest to Lowest',
-        'Time Created Oldest to Newest',
-        'Time Created Newest to Oldest',
+      sort_options: [{
+          value: 'name',
+          label: 'Name'
+        },
+        {
+          value: 'rank',
+          label: 'Rank'
+        },
+        {
+          value: 'time_created',
+          label: 'Time Created'
+        }
       ],
-      default_sort: 'Name A-Z',
+      default_sort: 'Name',
       querytext: '',
       page: 1,
       pagination: {
@@ -29,6 +35,15 @@ export default {
       }
     }
   },
+  components: {
+    'poke-stat': PokeStat
+  },
+  computed: {
+    search_disabled: function() {
+      return this.querytext.length === 0;
+    }
+  },
+
   watch: {
     // whenever question changes, this function will run
     '$route' (to, from) {
@@ -36,7 +51,6 @@ export default {
       this.page = this.$route.params.page || 1;
       this.pagination.currentPage = parseInt(this.page);
       this.getAll(parseInt(this.page))
-      // react to route changes...
     }
   },
   mounted() {
@@ -73,8 +87,8 @@ export default {
       })
     },
 
-    getPage(page) {
-      PokeService.getAll('name', page).then((data) => {
+    getPage(page, sortBy = 'name') {
+      PokeService.getAll(sortBy, page).then((data) => {
         let count = this.pagination.itemsPerPage;
         if (page * this.pagination.itemsPerPage > this.pagination.totalItems) {
           count = this.pagination.totalItems - ((page - 1) * this.pagination.itemsPerPage)
@@ -83,32 +97,19 @@ export default {
       })
     },
 
-    remove(key) {
-      PokeService.removeStatByKey(key).then(() => {
-        this.loadPage();
-      })
+    onSortChange(sortBy) {
+      this.getPage(1, sortBy.value)
     },
 
-    filterPokemons(query) {
-        if (query.length >= 3) {
-          PokeService.filterStatsByQueryText(query).then(() => {
-
-          })
-          return
-        }
-
-        if (query.length === 0) {
-          this.loadPage()
-        }
-    },
-
-    search() {
-      _.debounce(() => {
-        console.log('inde', this.querytext);
-        if (this.querytext) {
-          this.filterPokemons(this.querytext);
-        }
-      }, 1000)()
+    onKeyUp(event) {
+      if (event.key === 'Enter' && this.querytext) {
+        this.$router.push({
+          name: 'PokeCollectionFiltered',
+          params: {
+            query: this.querytext
+          }
+        })
+      }
     }
   }
 }
@@ -135,50 +136,25 @@ export default {
           </v-flex>
           <v-flex xs12>
             <v-toolbar dense xs12>
-              <v-text-field hide-details prepend-icon="search" v-model="querytext" single-line class="white--text" v-on:input="search"></v-text-field>
-
+              <v-flex xs6>
+                <v-text-field placeholder="Add search text to start search" hide-details v-model="querytext"
+                v-on:keyup="onKeyUp"
+                single-line class="white--text"></v-text-field>
+              </v-flex>
+              <v-flex xs1>
+                <router-link v-if="querytext" :to="{ name: 'PokeCollectionFiltered', params: {query: querytext} }" tag="button" :disabled="search_disabled">
+                  <v-icon :disabled="search_disabled">search</v-icon>
+                </router-link>
+              </v-flex>
               <v-spacer></v-spacer>
-              <v-combobox v-model="default_sort" :items="sort_options" label="Sort By"></v-combobox>
+              <v-combobox v-model="default_sort" :items="sort_options" item-text="label" return-object label="Sort By" @change="onSortChange(default_sort)"></v-combobox>
             </v-toolbar>
           </v-flex>
+          <v-flex xs12>
 
+          </v-flex>
           <v-flex xs12 v-for="(stat, index) in pokeStats.items" :key="stat.key">
-            <v-card color="cyan darken-2" class="white--text">
-
-              <v-layout>
-                <v-flex xs4>
-                  <v-img v-if="stat.image" :src="stat.image" height="150px" contain></v-img>
-
-                  <div v-if="!stat.image" height="150px" class="text-xs-center">
-                    <v-img src="https://s3.us-east-2.amazonaws.com/pokemon-bracelet/unknown.png" height="140px" contain></v-img>
-                    No Poke image here. <br> So just me
-                  </div>
-                </v-flex>
-                <v-flex xs8>
-                  <v-card-title primary-title>
-                    <div>
-                      <div class="headline">
-                        <span v-if="stat.decorator">({{stat.decorator}}) </span>{{stat.name}}
-                      </div>
-                      <div>Evolves From: {{stat.evolves_from}}</div>
-                      <div>Type: {{stat.type}}</div>
-                      <div>Weakness: {{stat.weakness}}</div>
-                      <div>Likes: {{stat.likes}}</div>
-                      <div>Dislikes: {{stat.dislikes}}</div>
-                      <div>Gender: {{stat.gender}}</div>
-                      <div>Ball: {{stat.ball}}</div>
-                      <div>Collected at {{ stat.time_added | moment("dddd, MMMM Do YYYY")}}</div>
-                      <div>
-                        <router-link :to="{ name: 'PokeCollectionEditor', params: { key: stat.key, page: pagination.currentPage}}" tag="button">
-                          <v-icon size="20" light color="white">edit</v-icon>
-                        </router-link>
-                        <v-icon size="20" light color="white" @click="remove(stat.key)">delete_forever</v-icon>
-                      </div>
-                    </div>
-                  </v-card-title>
-                </v-flex>
-              </v-layout>
-            </v-card>
+            <poke-stat :stat="stat"></poke-stat>
             <v-divider></v-divider>
 
           </v-flex>

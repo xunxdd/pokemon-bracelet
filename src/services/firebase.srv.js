@@ -42,6 +42,16 @@ const FirebaseUtil = {
       .orderByChild(orderBy)
       .limitToFirst(itemsPerPage * pageNumber)
       .once('value')
+  },
+
+  filteQuery(ref = null, orderBy = 'name', queryText = '') {
+    if (!ref) {
+      return null
+    }
+
+    return ref
+      .orderByChild(orderBy)
+      .once('value')
   }
 }
 export {

@@ -14,9 +14,7 @@
   </v-navigation-drawer>
   <v-toolbar app :clipped-left="clipped">
     <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-    <!--<v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>-->
+      <img src="/static/bracelet.png" height="85" class="m-2" />
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer></v-spacer>
 
@@ -32,7 +30,7 @@
         <v-spacer></v-spacer>
 
         <v-btn v-for="icon in icons" :key="icon" class="mx-3" dark icon>
-          <img :src=" 'static/icons/' + icon"  height="36"/>
+          <img :src=" 'static/icons/' + icon" height="36" />
         </v-btn>
       </v-card-title>
 

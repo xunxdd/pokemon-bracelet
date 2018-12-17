@@ -1,42 +1,16 @@
 <script>
 import PokeService from '@/services/poke.srv'
-import FileInput from '@/components/common/FileInput'
-import FileUploadSrv from '@/services/fileupload.srv'
-
-const awsBucket = 'https://s3.us-east-2.amazonaws.com/pokemon-bracelet/'
 
 export default {
   $_veeValidate: {
     validator: 'new'
   },
-  components: {
-    'file-input': FileInput
-  },
   data: () => ({
     key: '',
     stat_props: {
       name: '',
-      decorator: '',
-      evolves_from: '',
-      evolves_into: '',
-      weakness: '',
-      type: '',
-      likes: '',
-      dislikes: '',
-      gender: '',
-      ball: '',
-      image: '',
       rank: 0
     },
-    genders: [{
-        value: 'Female',
-        label: 'Female'
-      },
-      {
-        value: 'Male',
-        label: 'Male'
-      }
-    ],
   }),
 
   mounted() {
