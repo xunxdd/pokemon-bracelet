@@ -2,6 +2,12 @@ import Firebase from 'firebase/app';
 import 'firebase/database';
 import Configs from '../../config/data-config/firebase'
 
+const RefNames = {
+  braceletholds: 'BraceletHolds',
+  braceletpowers: 'BraceletPowers',
+  braceletmoves: 'BraceletMoves',
+  braceletwishes: 'BraceletWishes',
+}
 const FirebaseApp = Firebase.apps.length ? Firebase.apps[0] : Firebase.initializeApp(Configs.FIREBASE_CONFIG)
 
 const FirebaseUtil = {
@@ -56,5 +62,6 @@ const FirebaseUtil = {
 }
 export {
   FirebaseApp,
-  FirebaseUtil
+  FirebaseUtil,
+  RefNames,
 }

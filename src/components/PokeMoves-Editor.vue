@@ -4,7 +4,7 @@ import {
   RefNames
 } from '../services/firebase.srv'
 
-const RefName = RefNames.braceletholds;
+const RefName = RefNames.braceletmoves;
 export default {
   $_veeValidate: {
     validator: 'new'
@@ -19,7 +19,6 @@ export default {
   mounted() {
     const params = this.$route.params;
     this.key = params.key;
-    console.log(this.key)
     if (this.isNew()) {
       return;
     }
@@ -40,12 +39,12 @@ export default {
 
         if (!this.isNew()) {
           BraceletSrv.updateStatByKey(RefName, this.key, this.stat_props);
-          return this.goBackToBraceletCanHold(this.key)
+          return this.goBackToBracelet(this.key)
         }
         this.stat_props.time_added = Date.now()
         BraceletSrv.save(RefName, this.stat_props)
           .then((newstat) => {
-            this.goBackToBraceletCanHold(newstat.key)
+            this.goBackToBracelet(newstat.key)
           })
           .catch(error => {
             console.log(error)
@@ -53,9 +52,9 @@ export default {
       });
     },
 
-    goBackToBraceletCanHold(key) {
+    goBackToBracelet(key) {
       return this.$router.push({
-        name: 'BraceletCanHold'
+        name: 'PokeMoves'
       });
     },
 
@@ -77,7 +76,7 @@ export default {
             <v-card color="blue-grey darken-2" class="white--text">
               <v-card-title primary-title>
                 <div>
-                  <div class="headline">Add / Edit : Bracelet can hold</div>
+                  <div class="headline">Add / Edit : Bracelet Powers</div>
                   <span>Say Something here, Yung</span>
                 </div>
               </v-card-title>

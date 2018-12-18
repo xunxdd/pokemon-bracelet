@@ -1,7 +1,6 @@
 <script>
 import PokeService from '@/services/poke.srv'
 import PokeStat from '@/components/component/stat'
-
 import Vue from 'vue'
 import _ from 'lodash'
 

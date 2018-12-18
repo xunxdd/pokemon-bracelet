@@ -6,9 +6,16 @@ import PokeCollectionFiltered from '@/components/PokeCollectionFiltered'
 import PokeCollectionEditor from '@/components/PokeCollection-Editor'
 import PokeStatCard from '@/components/PokeStatCard'
 import PokeMoves from '@/components/PokeMoves'
+import PokeMovesEditor from '@/components/PokeMoves-Editor'
 import BraceletPowers from '@/components/BraceletPowers'
+import BraceletPowersEditor from '@/components/BraceletPowers-Editor'
 import BraceletCanHold from '@/components/BraceletCanHold'
+import BraceletCanHoldEditor from '@/components/BraceletCanHold-Editor'
 import WishList from '@/components/WishList'
+import WishListEditor from '@/components/WishList-Editor'
+import Login from '@/components/auth/login'
+import Register from '@/components/auth/register'
+
 Vue.use(Router)
 
 export default new Router({
@@ -49,9 +56,19 @@ export default new Router({
       component: PokeMoves
     },
     {
+      path: '/pokemoves-editor/:key',
+      name: 'PokeMovesEditor',
+      component: PokeMovesEditor
+    },
+    {
       path: '/braceletpowers',
       name: 'BraceletPowers',
       component: BraceletPowers
+    },
+    {
+      path: '/braceletpowers-editor/:key',
+      name: 'BraceletPowersEditor',
+      component: BraceletPowersEditor
     },
     {
       path: '/braceletcanhold',
@@ -59,9 +76,29 @@ export default new Router({
       component: BraceletCanHold
     },
     {
+      path: '/braceletcanhold-editor/:key',
+      name: 'BraceletCanHoldEditor',
+      component: BraceletCanHoldEditor
+    },
+    {
       path: '/wishlist',
       name: 'WishList',
       component: WishList
+    },
+    {
+      path: '/wishlist-editor/:key',
+      name: 'WishListEditor',
+      component: WishListEditor
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     }
   ],
   scrollBehavior (to, from, savedPosition) {

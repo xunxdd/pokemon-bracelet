@@ -1,51 +1,69 @@
 <script>
-import FileUploadSrv from '@/services/fileupload.srv'
+import ThemeSrv from '@/services/theme.srv'
+import Vue from 'vue'
 
 export default {
+  data() {
+    return {
+      theme: {
+        title: {
+          value: ''
+        }
+      },
+      canEdit: true,
+      inEditingMode: true,
+      processing: {}
+    }
+  },
   mounted() {
-    setTimeout(() => {
-      FileUploadSrv.wakeFileUploadApp();
-    }, 1000);
+    this.getTheme();
+  },
+  methods: {
+    getTheme() {
+      ThemeSrv.getTheme().then((theme) => {
+        this.theme = theme;
+        console.log(this.theme)
+      })
+    },
+    setInProcessing(fieldName) {
+      Vue.set(this.processing, fieldName, true);
+    },
+
+    onKeyUp(event, fieldName, fieldValue) {
+      if (event.key === 'Enter' && fieldValue) {
+        ThemeSrv.update(fieldName, fieldValue).then(() => {
+          Vue.set(this.processing, fieldName, false);
+        })
+      }
+    }
   }
 }
 </script>
-
 <template>
-  <v-container fluid>
-    <v-slide-y-transition mode="out-in">
-      <div>
+<v-container fluid>
+  <v-slide-y-transition mode="out-in">
+    <div>
       <section>
-      <v-parallax src="/static/images/pokemon-bg.jpg" height="600">
-        <v-layout
-          column
-          align-center
-          justify-center
-          class="white--text"
-        >
-          <h1 class="white--text mb-2 display-1 text-xs-center">Bracelet</h1>
-          <div class="subheading mb-3 text-xs-center">A battle of pokèmon minds</div>
-          <v-btn
-            class="blue lighten-2 mt-5"
-            dark
-            @click="" to="/poke/1"
-            large
-          >
-            Get Started
-          </v-btn>
+        <v-parallax :src="theme.homebg1" height="600">
+          <v-layout column align-center justify-center class="white--text">
+            <h1 v-if="!processing.title" class="white--text mb-2 display-1 text-xs-center">{{theme.title.value}}<v-icon v-if="inEditingMode" @click="setInProcessing('title')">edit</v-icon></h1>
+            <h1><v-text-field placeholder="input title" hide-details v-model="theme.title.value"
+          v-on:keyup="onKeyUp($event, 'title', theme.title.value)"
+          v-if="processing.title"
+          single-line class="white--text"></v-text-field></h1>
+            <div class="subheading mb-3 text-xs-center">A battle of minds, pokemon, boys and girls</div>
+            <v-btn class="blue lighten-2 mt-5" dark @click="" to="/poke/1" large>
+              Get Started
+            </v-btn>
+            <v-btn color="orange" v-if="inEditingMode">Change Background image</v-btn>
 
+          </v-layout>
 
-        </v-layout>
-
-      </v-parallax>
-    </section>
+        </v-parallax>
+      </section>
 
       <section>
-        <v-layout
-          column
-          wrap
-          class="my-5"
-          align-center
-        >
+        <v-layout column wrap class="my-5" align-center>
           <v-flex xs12 sm4 class="my-3">
             <div class="text-xs-center">
               <h2 class="headline">Why bracelet?</h2>
@@ -66,9 +84,8 @@ export default {
                       <div class="headline text-xs-center">Material Design</div>
                     </v-card-title>
                     <v-card-text>
-                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
+                      potenti.
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -81,9 +98,8 @@ export default {
                       <div class="headline">Fast development</div>
                     </v-card-title>
                     <v-card-text>
-                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
+                      potenti.
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -96,9 +112,8 @@ export default {
                       <div class="headline text-xs-center">Completely Open Sourced</div>
                     </v-card-title>
                     <v-card-text>
-                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                      Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                      Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
+                      potenti.
                     </v-card-text>
                   </v-card>
                 </v-flex>
@@ -109,22 +124,17 @@ export default {
       </section>
 
       <section>
-        <v-parallax src="/static/images/pokemon-bg2.jpg" height="380">
+        <v-parallax :src="theme.homebg2" height="380">
           <v-layout column align-center justify-center>
             <div class="headline white--text mb-3 text-xs-center">Web development has never been easier</div>
             <em>Kick-start your application today</em>
-            <v-btn
-              class="blue lighten-2 mt-5"
-              dark
-              large
-              @click="" to="/poke/1"
-            >
+            <v-btn class="blue lighten-2 mt-5" dark large @click="" to="/poke/1">
               Get Started
             </v-btn>
           </v-layout>
         </v-parallax>
       </section>
-    <section>
+      <section>
         <v-container grid-list-xl>
           <v-layout row wrap justify-center class="my-5">
             <v-flex xs12 sm4>
@@ -133,9 +143,8 @@ export default {
                   <div class="headline">Company info</div>
                 </v-card-title>
                 <v-card-text>
-                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare.
-                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                  Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse potenti.
+                  Cras facilisis mi vitae nunc lobortis pharetra. Nulla volutpat tincidunt ornare. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam in aliquet odio. Aliquam eu est vitae tellus bibendum tincidunt. Suspendisse
+                  potenti.
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -178,25 +187,29 @@ export default {
           </v-layout>
         </v-container>
       </section>
-</div>
+    </div>
 
-    </v-slide-y-transition>
-  </v-container>
+  </v-slide-y-transition>
+</v-container>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 a {
   color: #42b983;
 }

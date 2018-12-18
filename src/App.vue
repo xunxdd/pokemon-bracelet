@@ -17,7 +17,9 @@
       <img src="/static/bracelet.png" height="85" class="m-2" />
     <v-toolbar-title v-text="title"></v-toolbar-title>
     <v-spacer></v-spacer>
-
+    <v-btn flat @click="" :to="{path: '/login'}" >
+      Sign In <img src="static/icons/icons8-pokemon-48.png" height="48"/>
+    </v-btn>
   </v-toolbar>
   <v-content>
     <router-view/>
@@ -68,17 +70,17 @@ export default {
         {
           icon: 'bubble_chart',
           title: 'Bracelet Powers',
-          route: 'braceletpowers'
+          route: '/braceletpowers'
         },
         {
           icon: 'bubble_chart',
           title: 'Bracelet Can Hold ...',
-          route: 'BraceletCanHold'
+          route: '/BraceletCanHold'
         },
         {
           icon: 'bubble_chart',
           title: 'My Wish List',
-          route: 'WishList'
+          route: '/WishList'
         }
       ],
       icons: [
